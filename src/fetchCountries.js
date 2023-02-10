@@ -1,8 +1,16 @@
+import Notiflix from 'notiflix';
+Notiflix.Notify.init({
+  position: 'center-top',
+  width: '350px',
+  fontSize: '15px',
+  clickToClose: true,
+});
+
 export { fetchCountries };
 
 function fetchCountries(name) {
   return fetch(
-    `https://restcountries.com/v3.1/name/${name}?fields=name.official,capital,population,flags.svg,languages`
+    `https://restcountries.com/v3.1/name/${name}?fields=name,capital,population,flags,languages`
   )
     .then(response => {
       if (!response.ok) {
@@ -11,8 +19,9 @@ function fetchCountries(name) {
       return response.json();
     })
     .then(names => {
-      console.log(names);
-      return names[0];
+      return names;
     })
-    .catch(error => console.log(error));
+    .catch(error =>
+      Notiflix.Notify.failure('Oops, there is no country with that name')
+    );
 }
